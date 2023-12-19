@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+    
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image:linear-gradient(to right ,blueviolet, rgb(153, 119, 186)) ;
+        }
+
+        .container {
+            text-align: center;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            border-top-right-radius: 20px;
+        
+        }
+
+        h1 {
+            color: #333333;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            color: #555555;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 15px;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #dicaAtual {
+            margin-top: 20px;
+            font-weight: bold;
+            color: #333333;
+        }
+
+        #chuteSection {
+            display: none;
+            margin-top: 20px;
+        }
+
+        #resultadoChute {
+            margin-top: 10px;
+            color: #333333;
+            font-size: 20px;
+        }
+
+        #tentativas {
+            margin-top: 10px;
+            color: #FF0000;
+        }
+
+        #venceu {
+            margin-top: 20px;
+            color: #4caf50;
+            font-size: 24px;
+        }
+        .acertou {
+          font-size: x-large;
+          font-weight: 700;
+          color: green;
+        }
+    </style>
+    <title >Adivinhe a palavra</title>
+</head>
+<body>
+    <div class="container" id="gameContainer">
+        <h1 id="titulo">Adivinhe a palavra </h1>
+        <p class="acertou"></p>
+        <label for="palavra">Insira uma palavra:</label>
+        <input type="text" id="palavra" placeholder="Palavra">
+        <label for="dica">Insira uma dica:</label>
+        <input type="text" id="dica" placeholder="Dica">
+        <button onclick="iniciarJogo()">Iniciar Jogo</button>
+        <div id="dicaAtual"></div>
+        <div id="chuteSection">
+            <label for="chute">Faça seu chute:</label>
+            <input type="text" id="chute" placeholder="Chute">
+            <button onclick="verificarChute()">Verificar</button>
+            <div id="resultadoChute"></div>
+            <div id="tentativas"></div>
+            <div id="venceu"></div>
+            <div id="perdeu"></div>
+            <button onclick="reiniciarJogo()">Reiniciar Jogo</button>
+        </div>
+    </div>
+    <script>
+        var palavraEscolhida;
+        var tentativasRestantes;
+        
+        function iniciarJogo() {
+        
+            palavraEscolhida = document.getElementById('palavra').value.toLowerCase();
+            var dica = document.getElementById('dica').value;
+
+            if (palavraEscolhida !== '' && dica !== '') {
+                document.getElementById('dicaAtual').innerHTML = 'Dica: ' + dica;
+                tentativasRestantes = 10;
+                document.getElementById('tentativas').innerHTML = 'Tentativas restantes: ' + tentativasRestantes;
+                document.getElementById('gameContainer').innerHTML += '<div id="tentativas">Tentativas restantes: 10</div>';
+                document.getElementById('palavra').style.display = 'none';
+                document.getElementById('dica').style.display = 'none';
+                document.getElementById('chuteSection').style.display = 'block';
+            } else {
+                alert('Por favor, preencha a palavra e a dica.');
+            }
+        }
+        var titulo;
+        function verificarChute() {
+          let paraWin = document.querySelector('.acertou');
+            var chute = document.getElementById('chute').value.toLowerCase();
+
+            if (chute === palavraEscolhida) {
+                document.getElementById('venceu').innerHTML = 'Você venceu!';
+                document.getElementById('venceu').style.color = '#4caf50';
+                document.getElementById('venceu').style.fontSize = '24px';
+                document.getElementById('chuteSection').innerHTML = '<button onclick="reiniciarJogo()">Reiniciar Jogo</button>';
+                paraWin.innerHTML = 'PARABÉNS, VOCÊ ACERTOU!!!';
+                
+            } else {
+                tentativasRestantes--;
+                document.getElementById('tentativas').innerHTML = 'Tentativas restantes: ' + tentativasRestantes;
+                if (tentativasRestantes === 0) {
+                    document.getElementById('resultadoChute').innerHTML = 'Você perdeu :( A palavra era: ' + palavraEscolhida;
+                    document.getElementById('chuteSection').innerHTML = `<h1>${palavraEscolhida}</h1>` +  '<button onclick="reiniciarJogo()">Reiniciar Jogo</button>';
+                    
+                } else {
+                    document.getElementById('resultadoChute').innerHTML = 'Você errou. Tente novamente.';
+                }
+            }
+        }
+
+        function reiniciarJogo() {
+            location.reload();
+        }
+    </script>
+</body>
+</html>
